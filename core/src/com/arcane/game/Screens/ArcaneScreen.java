@@ -12,9 +12,11 @@ import com.badlogic.gdx.ScreenAdapter;
  */
 
 public abstract class ArcaneScreen extends ScreenAdapter{
+
     ArcaneOdyssey mainGame;
     public ArcaneOdyssey getMainGame() {
         return this.mainGame;
     }
+    abstract public int StatusCode();
 
 }

@@ -17,13 +17,18 @@ import java.util.LinkedList;
  */
 public class Charlotte extends Actor {
     private TextureRegion region;
-
-    public Charlotte(LinkedList<Texture> textures, String path) {
+    private float ratio;
+    private static final float portion = 0.1F;
+    private static final float margin = 0.1F;
+    private static final float heightPortion = 0.3F;
+    public Charlotte(LinkedList<Texture> textures, String path, float WORLD_WIDTH, float WORLD_HEIGHT) {
         super();
         Texture tempTexture = new Texture(Gdx.files.internal(path));
         textures.add(tempTexture);
         this.region = new TextureRegion(tempTexture);
-        setSize(region.getRegionWidth(), region.getRegionHeight());
+        ratio = (float) region.getRegionHeight() / region.getRegionWidth();
+        setSize(WORLD_WIDTH * portion, WORLD_WIDTH * portion * ratio);
+        setPosition(WORLD_WIDTH * margin, WORLD_HEIGHT * heightPortion);
     }
 
     public Charlotte(TextureRegion region) {

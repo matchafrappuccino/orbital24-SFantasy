@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class TitleScreen extends ArcaneScreen{
 
+    public final static int StatusCode = ArcaneOdyssey.NotInBattle;
     private Viewport viewport;
     private Stage mainStage;
     private float width;
@@ -35,7 +36,7 @@ public class TitleScreen extends ArcaneScreen{
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.4F, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         mainStage.act();
         mainStage.draw();
@@ -66,4 +67,8 @@ public class TitleScreen extends ArcaneScreen{
 
     }
 
+    @Override
+    public int StatusCode() {
+        return StatusCode;
+    }
 }

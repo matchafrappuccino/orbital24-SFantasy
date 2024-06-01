@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.LinkedList;
 
 public class BattleScreen extends ArcaneScreen{
+    public int StatusCode = ArcaneOdyssey.SelectingCard;
     private Draculas draculas;
     private Charlotte charlotte;
     private Stage stage;
@@ -29,17 +30,14 @@ public class BattleScreen extends ArcaneScreen{
         this.viewport = new FillViewport(width, height);
         this.stage = new Stage(viewport);
 
-        charlotte = new Charlotte(textures, "char.png");
-        charlotte.setScale(5, 5);
+        charlotte = new Charlotte(textures, "char.png", width, height);
 
-        draculas = new Draculas();
+        draculas = new Draculas(width, height);
         draculas.addActor(new Dracula(textures, "enemy1.png"));
         draculas.addActor(new Dracula(textures, "enemy1.png"));
-        draculas.setPosition(width - draculas.getWidth(), 0);
 
         stage.addActor(charlotte);
         stage.addActor(draculas);
-        stage.getActors().forEach((x) -> x.setY(100));
     }
 
     @Override
@@ -51,4 +49,8 @@ public class BattleScreen extends ArcaneScreen{
     }
 
 
+    @Override
+    public int StatusCode() {
+        return this.StatusCode;
+    }
 }

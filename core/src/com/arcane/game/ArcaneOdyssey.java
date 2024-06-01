@@ -24,6 +24,9 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class ArcaneOdyssey extends Game {
+	public final static int NotInBattle = -1;
+	public final static int SelectingCard = 0;
+	public final static int CardSelected = 1;
 	private float totalHeight;
 	private float totalWidth;
 	LinkedList<Texture> textures;
@@ -31,6 +34,7 @@ public class ArcaneOdyssey extends Game {
 	private Draculas draculas;
 	private Graphics.DisplayMode currentDisplayMode;
 	private ArcaneScreen curScreen;
+	private int statusCode;
 
 	@Override
 	public void create () {
@@ -43,6 +47,9 @@ public class ArcaneOdyssey extends Game {
 
 		//Initialize start screen
 		this.setScreen(new TitleScreen(this));
+
+		//Initialize status
+		statusCode = this.getScreen().StatusCode();
 
 	}
 
@@ -84,6 +91,16 @@ public class ArcaneOdyssey extends Game {
 
 	public float getTotalHeight() {
 		return totalHeight;
+	}
+
+	@Override
+	public ArcaneScreen getScreen() {
+		return (ArcaneScreen) super.getScreen();
+	}
+
+	public void setScreen (ArcaneScreen screen) {
+		super.setScreen(screen);
+		this.statusCode = screen.StatusCode();
 	}
 
 }
