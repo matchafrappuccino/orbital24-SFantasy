@@ -62,7 +62,7 @@ public class BattleScreen extends ArcaneScreen{
         Texture background = new Texture(Gdx.files.internal("Backgrounds/Grass.png"));
         Batch bg = new SpriteBatch();
         bg.begin();
-        bg.draw(background, 0, 0, width, height);
+        bg.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         bg.end();
         stage.act();
         stage.draw();
