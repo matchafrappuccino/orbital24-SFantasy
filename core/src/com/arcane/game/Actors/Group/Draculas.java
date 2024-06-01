@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class Draculas extends Group {
-    private final static float distance = -400F;
+    private final static float distance = 10F;
     private float nextPos = 0F;
 
     public Draculas() {
