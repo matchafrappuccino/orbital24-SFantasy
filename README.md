@@ -1,5 +1,5 @@
-# Arcane
-Presented by SFantasy; Designed for Orbital 2024
+# Arcane by SFantasy
+Designed for Orbital 2024
 
 ## Installation
 1. Clone the repository
@@ -13,7 +13,7 @@ cd orbital24-SFantasy
 3. Install [IntelliJ IDEA](https://www.jetbrains.com/idea/).
 4. Install libGDX, open `Settings` of IntelliJ IDEA, click `Plugins`, search for `libGDX` and install it to your IntelliJ IDEA.
 5. Select "Open Project", choose the file `build.gradle`, and click `Open as Project`.
-6. Run the project using.
+6. Run the project.
 
 ## Overview
 SFantasy is a Roguelike card game inspired by the strategic depth and replayability of "Slay the Spire." Our goal is to develop a game with strong playability, sophisticated logic, appealing graphics, and assured stability, showcasing our technical skills and creative capabilities in the realm of software engineering.
