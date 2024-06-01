@@ -1,6 +1,5 @@
-package com.arcane.game.Actors.Group;
+package com.arcane.game.Actors.Characters;
 
-import com.arcane.game.Actors.Dracula;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 

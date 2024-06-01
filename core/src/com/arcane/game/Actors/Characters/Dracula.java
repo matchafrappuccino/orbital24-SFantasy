@@ -1,4 +1,4 @@
-package com.arcane.game.Actors;
+package com.arcane.game.Actors.Characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

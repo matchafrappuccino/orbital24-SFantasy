@@ -1,8 +1,10 @@
 package com.arcane.game.Screens;
 
-import com.arcane.game.Actors.Charlotte;
-import com.arcane.game.Actors.Dracula;
-import com.arcane.game.Actors.Group.Draculas;
+import com.arcane.game.Actors.Cards.Card;
+import com.arcane.game.Actors.Cards.HandCards;
+import com.arcane.game.Actors.Characters.Charlotte;
+import com.arcane.game.Actors.Characters.Dracula;
+import com.arcane.game.Actors.Characters.Draculas;
 import com.arcane.game.ArcaneOdyssey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,6 +21,7 @@ public class BattleScreen extends ArcaneScreen{
     public int StatusCode = ArcaneOdyssey.SelectingCard;
     private Draculas draculas;
     private Charlotte charlotte;
+    private HandCards handCards;
     private Stage stage;
     private Viewport viewport;
     private float width;
@@ -38,8 +41,18 @@ public class BattleScreen extends ArcaneScreen{
         draculas.addActor(new Dracula(textures, "enemy1.png"));
         draculas.addActor(new Dracula(textures, "enemy1.png"));
 
+        handCards = new HandCards(width, height);
+        handCards.addActor(new Card("Cards/EmptyCard.png", width, height));
+        handCards.addActor(new Card("Cards/EmptyCard.png", width, height));
+
         stage.addActor(charlotte);
         stage.addActor(draculas);
+        stage.addActor(handCards);
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
