@@ -16,7 +16,7 @@ cd orbital24-SFantasy
 6. Run `./desktop/src/com/arcane.game/DesktopLauncher.java` using IntelliJ IDEA.
 
 ## Overview
-SFantasy is a Roguelike card game inspired by the strategic depth and replayability of "Slay the Spire." Our goal is to develop a game with strong playability, sophisticated logic, appealing graphics, and assured stability, showcasing our technical skills and creative capabilities in the realm of software engineering.
+Arcane is a Roguelike card game presented by Group SFantasy of Orbital 2024, which is inspired by the strategic depth and replayability of "Slay the Spire." Our goal is to develop a game with strong playability, sophisticated logic, appealing graphics, and assured stability, showcasing our technical skills and creative capabilities in the realm of software engineering.
 
 ## Aim
 Develop a Roguelike card game with extraordinary deck-building mechanics to offer a unique gaming experience. Utilize modern software engineering principles to deepen our understanding of game development, from conceptualization to implementation.
