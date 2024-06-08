@@ -1,5 +1,7 @@
 package com.arcane.game.Actors.Cards;
 
+import com.arcane.game.Actors.Characters.Charlotte;
+import com.arcane.game.Actors.Characters.Dracula;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,45 +19,77 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
     Card would the father class of all cards.
     It will implement every functionality a card can have, while itself would be 'empty'.
 */
-public class Card extends Image {
+public class Card<T extends Actor> extends Image {
+    private HandCards handCards;
     private float WORLD_WIDTH;
     private float WORLD_HEIGHT;
     private boolean selected;
     private static final float ratio = 1.5F;
     private static final float portion = 0.1F;
     private Texture arrow = new Texture(Gdx.files.internal("UI/arrow.png"));
-    public Card (String path, float WORLD_WIDTH, float WORLD_HEIGHT) {
+    public Card (String path, HandCards handCards) {
         super(new Texture(Gdx.files.internal(path)));
-        this.WORLD_WIDTH = WORLD_WIDTH;
-        this.WORLD_HEIGHT = WORLD_HEIGHT;
+        this.handCards = handCards;
+        this.WORLD_WIDTH = Gdx.graphics.getWidth();
+        this.WORLD_HEIGHT = Gdx.graphics.getHeight();
         selected = false;
         this.setSize(WORLD_WIDTH * portion, WORLD_WIDTH * portion * ratio);
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                selected = true;
-                setDrawable(new TextureRegionDrawable(
-                        mergeTexturesVertically(((TextureRegionDrawable) getDrawable()).getRegion().getTexture()
-                                , arrow)
-                ));
+                if (handCards.hasCardSelected()) {
+                    return;
+                }
+                setY(10F);
+                setSize(WORLD_WIDTH * portion * 1.5F, WORLD_WIDTH * portion * ratio * 1.5F);
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal(path))));
+                if (selected && handCards.hasCardSelected()) {
+                    return;
+                }
+                setSize(WORLD_WIDTH * portion, WORLD_WIDTH * portion * ratio);
             }
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("clicked");
-                return;
+                if (handCards.hasCardSelected()) {
+                    return;
+                }
+                selected = true;
+                setSize(WORLD_WIDTH * portion * 1.5F, WORLD_WIDTH * portion * ratio * 1.5F);
+                handCards.updateCards();
             }
+
+
         });
+    }
+
+    public boolean perform(Actor target) {
+        if ((isToDracula() && target instanceof Dracula) || (!isToDracula() && target instanceof Charlotte)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void act(float delta) {
         return; //Do nothing
+    }
+
+    public void unSelect() {
+        selected = false;
+        setSize(WORLD_WIDTH * portion, WORLD_WIDTH * portion * ratio);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public boolean isToDracula() {
+        return true;
     }
 
     public Texture mergeTexturesVertically(Texture texture1, Texture texture2) {

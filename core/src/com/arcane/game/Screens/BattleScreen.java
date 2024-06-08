@@ -7,6 +7,7 @@ import com.arcane.game.Actors.Characters.Dracula;
 import com.arcane.game.Actors.Characters.Draculas;
 import com.arcane.game.ArcaneOdyssey;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -38,13 +39,17 @@ public class BattleScreen extends ArcaneScreen{
 
         charlotte = new Charlotte(textures, "char.png", width, height);
 
-        draculas = new Draculas(width, height);
-        draculas.addActor(new Dracula(textures, "enemy1.png"));
-        draculas.addActor(new Dracula(textures, "enemy1.png"));
 
-        handCards = new HandCards(width, height);
-        handCards.addActor(new Card("Cards/EmptyCard.png", width, height));
-        handCards.addActor(new Card("Cards/EmptyCard.png", width, height));
+
+        handCards = new HandCards();
+        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
+
+        draculas = new Draculas(width, height, handCards);
+        draculas.addActor(new Dracula(textures, "enemy1.png", draculas));
+        draculas.addActor(new Dracula(textures, "enemy1.png", draculas));
 
         stage.addActor(charlotte);
         stage.addActor(draculas);
@@ -67,6 +72,10 @@ public class BattleScreen extends ArcaneScreen{
         bg.end();
         stage.act();
         stage.draw();
+
+        if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+            handCards.unSelectCard();
+        }
     }
 
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.util.LinkedList;
 
@@ -20,20 +22,35 @@ import java.util.LinkedList;
 public class Dracula extends Actor {
     private TextureRegion region;
 
-    public Dracula(LinkedList<Texture> textures, String path) {
+    public Dracula(LinkedList<Texture> textures, String path, Draculas draculas) {
         super();
         Texture tempTexture = new Texture(Gdx.files.internal(path));
         textures.add(tempTexture);
         this.region = new TextureRegion(tempTexture);
         this.region.flip(false, false);
         setSize(region.getRegionWidth(), region.getRegionHeight());
+
+        this.addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                draculas.selectDracula(itSelf());
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                draculas.unSelectDracula(itSelf());
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Confirmed");
+                draculas.confirmSelection(itSelf());
+            }
+        });
     }
 
-    public Dracula(TextureRegion region) {
-        super();
-        this.region = region;
-        this.region.flip(false, false);
-        setSize(region.getRegionWidth(), region.getRegionHeight());
+    private Dracula itSelf() {
+        return this;
     }
 
     public TextureRegion getRegion() {
