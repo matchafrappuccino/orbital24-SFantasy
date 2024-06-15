@@ -1,6 +1,8 @@
 package com.arcane.game.Actors.Cards;
 
+import com.arcane.game.Actors.Characters.Charlotte;
 import com.arcane.game.Actors.Characters.Dracula;
+import com.arcane.game.Actors.Characters.Draculas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,12 +14,16 @@ public class HandCards extends Group {
     private final static float distance = 50F;
     private float WORLD_WIDTH;
     private float WORLD_HEIGHT;
+    private Charlotte charlotte;
+    private Draculas draculas;
 
-    public HandCards() {
+    public HandCards(Charlotte charlotte, Draculas draculas) {
         super();
         setSize(0F, 0F);
         this.WORLD_WIDTH = Gdx.graphics.getWidth();
         this.WORLD_HEIGHT = Gdx.graphics.getHeight();
+        this.charlotte = charlotte;
+        this.draculas = draculas;
     }
 
     @Override
@@ -76,10 +82,20 @@ public class HandCards extends Group {
 
     public void perform(Actor target) {
         if (selectedCard.perform(target)) {
+            charlotte.affectMP(selectedCard.getMPChange());
             removeActor(selectedCard);
             selectedCard = null;
         } else {
         }
+    }
+
+    public void newRound() {
+
+    }
+
+    public boolean isMPEnoughFor(Card card) {
+
+        return charlotte.isMPEnoughFor(card);
     }
 
 }

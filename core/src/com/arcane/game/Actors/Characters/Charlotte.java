@@ -1,10 +1,13 @@
 package com.arcane.game.Actors.Characters;
 
+import com.arcane.game.Actors.Cards.Card;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 
 import java.util.LinkedList;
 
@@ -21,14 +24,39 @@ public class Charlotte extends Actor {
     private static final float portion = 0.1F;
     private static final float margin = 0.1F;
     private static final float heightPortion = 0.3F;
+    private float WORLD_WIDTH;
+    private float WORLD_HEIGHT;
+    private int MAXHP = 100;
+    private int curHP = MAXHP;
+    private int MAXMP = 4;
+    private int curMP = MAXMP;
+    private ProgressBar HPBar;
+    private Label HPLabel;
+    private Label MPLabel;
     public Charlotte(LinkedList<Texture> textures, String path, float WORLD_WIDTH, float WORLD_HEIGHT) {
         super();
+        this.WORLD_WIDTH = WORLD_WIDTH;
+        this.WORLD_HEIGHT = WORLD_HEIGHT;
         Texture tempTexture = new Texture(Gdx.files.internal(path));
         textures.add(tempTexture);
         this.region = new TextureRegion(tempTexture);
         ratio = (float) region.getRegionHeight() / region.getRegionWidth();
         setSize(WORLD_WIDTH * portion, WORLD_WIDTH * portion * ratio);
         setPosition(WORLD_WIDTH * margin, WORLD_HEIGHT * heightPortion);
+    }
+    //Link the character to the HP bar and then set its pos and size;
+    public void linkHPBar(ProgressBar HPBar) {
+        this.HPBar = HPBar;
+        this.HPBar.setPosition(WORLD_WIDTH * margin, WORLD_HEIGHT * heightPortion);
+        this.HPBar.setWidth(WORLD_WIDTH * portion);
+    }
+
+    //Link the character to the HP label.
+    public void linkHPLabel(Label label) {
+        this.HPLabel = label;
+        label.setPosition(WORLD_WIDTH * margin + (getWidth() - label.getWidth()) / 2
+                , WORLD_HEIGHT * heightPortion - label.getHeight() / 2 );
+        label.setColor(1, 0, 0, 1);
     }
 
     public Charlotte(TextureRegion region) {
@@ -53,7 +81,7 @@ public class Charlotte extends Actor {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
+
     }
 
     @Override
@@ -74,5 +102,46 @@ public class Charlotte extends Actor {
                 getRotation()
         );
 
+    }
+
+    public void newRound() {
+
+    }
+
+    public int getMaxHP() {
+        return MAXHP;
+    }
+
+    public int getCurHP() {
+        return curHP;
+    }
+
+    public int getMAXMP() {return MAXMP;}
+    public int getCurMP() {return curMP;}
+    public void refreshMP() {
+        this.curMP = MAXMP;
+    }
+    public boolean isMPEnoughFor(Card card) {
+        return card.getCost() <= curMP;
+    }
+
+    public int affectHP(int delta) {
+        this.curHP += delta;
+        curHP = Math.max(0, Math.min(curHP, MAXHP));
+        this.setHP(curHP); //Update the HP bar and label.
+        return curHP;
+    }
+
+    //Method to Update the HP bar.
+    public void setHP(int HP) {
+        this.HPBar.setValue(HP);
+        this.HPLabel.setText(getCurHP() + " / " + getMaxHP());
+    }
+
+    public int affectMP(int delta) {
+        this.curMP += delta;
+        System.out.println(curMP);
+        curMP = Math.max(0, Math.min(curMP, MAXMP));
+        return curMP;
     }
 }

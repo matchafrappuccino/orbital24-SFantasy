@@ -1,10 +1,10 @@
 package com.arcane.game.Screens;
 
-import com.arcane.game.Actors.Cards.Card;
+import com.arcane.game.Actors.Cards.Cards.TestCard;
 import com.arcane.game.Actors.Cards.HandCards;
-import com.arcane.game.Actors.Characters.Charlotte;
-import com.arcane.game.Actors.Characters.Dracula;
 import com.arcane.game.Actors.Characters.Draculas;
+import com.arcane.game.Actors.Characters.Ordi_Dracula.TestDracula;
+import com.arcane.game.Actors.Initializer;
 import com.arcane.game.ArcaneOdyssey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,7 +21,7 @@ import java.util.LinkedList;
 public class BattleScreen extends ArcaneScreen{
     public int StatusCode = ArcaneOdyssey.SelectingCard;
     private Draculas draculas;
-    private Charlotte charlotte;
+    private Initializer.CharloSys charlotte;
     private HandCards handCards;
     private Stage stage;
     private Viewport viewport;
@@ -37,23 +36,26 @@ public class BattleScreen extends ArcaneScreen{
         this.viewport = new FillViewport(width, height);
         this.stage = new Stage(viewport);
 
-        charlotte = new Charlotte(textures, "char.png", width, height);
+        charlotte = Initializer.initializeCharlotte(textures, "char.png", width, height);
 
-
-
-        handCards = new HandCards();
-        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new Card("Cards/EmptyCard.png", handCards));
+        handCards = new HandCards(charlotte.getCharlotte(), draculas);
+        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
+        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
 
         draculas = new Draculas(width, height, handCards);
-        draculas.addActor(new Dracula(textures, "enemy1.png", draculas));
-        draculas.addActor(new Dracula(textures, "enemy1.png", draculas));
+        draculas.addActor(Initializer.initializeDracuSys(new TestDracula(textures ,draculas)));
+        draculas.addActor(Initializer.initializeDracuSys(new TestDracula(textures ,draculas)));
 
         stage.addActor(charlotte);
         stage.addActor(draculas);
         stage.addActor(handCards);
+    }
+
+    public void newRound() {
+        this.handCards.newRound();
+        this.charlotte.getCharlotte().newRound();
     }
 
     @Override
@@ -76,6 +78,11 @@ public class BattleScreen extends ArcaneScreen{
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
             handCards.unSelectCard();
         }
+    }
+
+    @Override
+    public void dispose() {
+        this.textures.forEach(Texture::dispose);
     }
 
 

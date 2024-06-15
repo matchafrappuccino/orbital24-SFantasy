@@ -19,14 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
     Card would the father class of all cards.
     It will implement every functionality a card can have, while itself would be 'empty'.
 */
-public class Card<T extends Actor> extends Image {
+public abstract class Card extends Image {
     private HandCards handCards;
     private float WORLD_WIDTH;
     private float WORLD_HEIGHT;
     private boolean selected;
     private static final float ratio = 1.5F;
     private static final float portion = 0.1F;
-    private Texture arrow = new Texture(Gdx.files.internal("UI/arrow.png"));
     public Card (String path, HandCards handCards) {
         super(new Texture(Gdx.files.internal(path)));
         this.handCards = handCards;
@@ -37,7 +36,7 @@ public class Card<T extends Actor> extends Image {
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (handCards.hasCardSelected()) {
+                if (handCards.hasCardSelected() || !handCards.isMPEnoughFor(itSelf())) {
                     return;
                 }
                 setY(10F);
@@ -54,7 +53,7 @@ public class Card<T extends Actor> extends Image {
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (handCards.hasCardSelected()) {
+                if (handCards.hasCardSelected() || !handCards.isMPEnoughFor(itSelf())) {
                     return;
                 }
                 selected = true;
@@ -66,18 +65,14 @@ public class Card<T extends Actor> extends Image {
         });
     }
 
-    public boolean perform(Actor target) {
-        if ((isToDracula() && target instanceof Dracula) || (!isToDracula() && target instanceof Charlotte)) {
-            return true;
-        } else {
-            return false;
-        }
+    public abstract boolean perform(Actor target);
+
+    public Card itSelf(){
+        return this;
     }
 
     @Override
-    public void act(float delta) {
-        return; //Do nothing
-    }
+    public abstract void act(float delta);
 
     public void unSelect() {
         selected = false;
@@ -88,36 +83,8 @@ public class Card<T extends Actor> extends Image {
         return selected;
     }
 
-    public boolean isToDracula() {
-        return true;
-    }
+    public abstract boolean isToDracula();
+    public abstract int getMPChange();
+    public abstract int getCost();
 
-    public Texture mergeTexturesVertically(Texture texture1, Texture texture2) {
-
-        if (!texture1.getTextureData().isPrepared()) {
-            texture1.getTextureData().prepare();
-        }
-        if (!texture2.getTextureData().isPrepared()) {
-            texture2.getTextureData().prepare();
-        }
-
-        Pixmap pixmap1 = texture1.getTextureData().consumePixmap();
-        Pixmap pixmap2 = texture2.getTextureData().consumePixmap();
-
-        int width = Math.max(texture1.getWidth(), texture2.getWidth());
-        int height = texture1.getHeight() + texture2.getHeight();
-        Pixmap pixmap = new Pixmap(width, height, pixmap1.getFormat());
-
-        pixmap.drawPixmap(pixmap1, 0, 0, 0, 0, texture1.getWidth(), texture1.getHeight());
-
-        pixmap.drawPixmap(pixmap2, 0, texture1.getHeight(), 0, 0, texture2.getWidth(), texture2.getHeight());
-
-        Texture combinedTexture = new Texture(pixmap);
-
-        pixmap1.dispose();
-        pixmap2.dispose();
-        pixmap.dispose();
-
-        return combinedTexture;
-    }
 }
