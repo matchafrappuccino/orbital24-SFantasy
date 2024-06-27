@@ -1,6 +1,12 @@
 package com.arcane.game.Actors.Characters;
 
+import com.arcane.game.Actions.Performance;
 import com.arcane.game.Actors.Cards.Card;
+import com.arcane.game.Actors.Cards.Cards.TestCard;
+import com.arcane.game.Actors.Cards.Deck;
+import com.arcane.game.Actors.Cards.HandCards;
+import com.arcane.game.Actors.Cards.InitialSetting.BasicSetting;
+import com.arcane.game.Actors.Character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /*
@@ -18,7 +25,7 @@ import java.util.LinkedList;
     Charlotte is the internal code name of our main character.
 
  */
-public class Charlotte extends Actor {
+public class Charlotte extends Character {
     private TextureRegion region;
     private float ratio;
     private static final float portion = 0.1F;
@@ -33,10 +40,14 @@ public class Charlotte extends Actor {
     private ProgressBar HPBar;
     private Label HPLabel;
     private Label MPLabel;
-    public Charlotte(LinkedList<Texture> textures, String path, float WORLD_WIDTH, float WORLD_HEIGHT) {
+    private HandCards handCards;
+    private Deck deck;
+    public Charlotte(LinkedList<Texture> textures, String path, float WORLD_WIDTH, float WORLD_HEIGHT, HandCards handCards) {
         super();
         this.WORLD_WIDTH = WORLD_WIDTH;
         this.WORLD_HEIGHT = WORLD_HEIGHT;
+        this.handCards = handCards;
+        deck = new Deck(this);
         Texture tempTexture = new Texture(Gdx.files.internal(path));
         textures.add(tempTexture);
         this.region = new TextureRegion(tempTexture);
@@ -84,6 +95,27 @@ public class Charlotte extends Actor {
 
     }
 
+    public void newBattle() {
+        this.deck.newBattle();
+        triggerNextRound();
+    }
+    private boolean playing = true;
+
+    public void endPlaying() {
+        this.playing = false;
+        this.handCards.endPlaying(deck);
+    }
+
+    public boolean roundEndConfirmed() {
+        return !playing;
+    }
+
+    public void triggerNextRound() {
+        playing  = true;
+        this.handCards.triggerNextRound(deck);
+        this.refreshMP();
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         //parentAlpha is a param a little complex to handle, so it's temporarily not handled here.
@@ -101,10 +133,6 @@ public class Charlotte extends Actor {
                 getScaleX(), getScaleY(),
                 getRotation()
         );
-
-    }
-
-    public void newRound() {
 
     }
 
@@ -140,8 +168,11 @@ public class Charlotte extends Actor {
 
     public int affectMP(int delta) {
         this.curMP += delta;
-        System.out.println(curMP);
         curMP = Math.max(0, Math.min(curMP, MAXMP));
         return curMP;
+    }
+
+    public ArrayList<Card> getSetting() {
+        return new BasicSetting(handCards);
     }
 }

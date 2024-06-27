@@ -1,7 +1,8 @@
 package com.arcane.game.Actors;
 
+import com.arcane.game.Actors.Cards.HandCards;
 import com.arcane.game.Actors.Characters.Charlotte;
-import com.arcane.game.Actors.Characters.Dracula;
+import com.arcane.game.Actors.Characters.Dracula.Dracula;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -77,29 +78,28 @@ public class Initializer {
         }
     }
     public static CharloSys initializeCharlotte(LinkedList<Texture> textures,
-                                                String path, float WORLD_WIDTH, float WORLD_HEIGHT) {
-        Charlotte charlotte = new Charlotte(textures, path, WORLD_WIDTH, WORLD_HEIGHT);
+                                                String path, float WORLD_WIDTH, float WORLD_HEIGHT, HandCards handCards) {
+        Charlotte charlotte = new Charlotte(textures, path, WORLD_WIDTH, WORLD_HEIGHT, handCards);
         ProgressBar HPBar = initializeHPBar(charlotte.getMaxHP());
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = Initializer.defaultFont;
         style.fontColor = new Color(1, 1F, 0F, 1F);
         Label HPLabel = new Label(charlotte.getMaxHP() + " / " + charlotte.getMaxHP(), style);
-        System.out.println(HPLabel.getText());
         charlotte.linkHPLabel(HPLabel);
         charlotte.linkHPBar(HPBar);
         return new CharloSys(charlotte, HPBar, HPLabel);
     }
 
     public static DracuSys initializeDracuSys(Dracula dracula) {
+
         ProgressBar HPBar = initializeHPBar(dracula.getMaxHP());
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = Initializer.defaultFont;
         style.fontColor = new Color(1, 1F, 0F, 1F);
         Label HPLabel = new Label(dracula.getCurHP() + " / " + dracula.getMaxHP(), style);
-        System.out.println(HPLabel.getText());
         dracula.linkHPLabel(HPLabel);
         dracula.linkHPBar(HPBar);
-        return new DracuSys(dracula, HPBar, HPLabel);
+        return dracula.linkSys(new DracuSys(dracula, HPBar, HPLabel));
     }
 
 

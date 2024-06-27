@@ -1,7 +1,7 @@
 package com.arcane.game;
 
 import com.arcane.game.Actors.Characters.Charlotte;
-import com.arcane.game.Actors.Characters.Draculas;
+import com.arcane.game.Actors.Characters.Dracula.Draculas;
 import com.arcane.game.Screens.ArcaneScreen;
 import com.arcane.game.Screens.TitleScreen;
 import com.badlogic.gdx.*;

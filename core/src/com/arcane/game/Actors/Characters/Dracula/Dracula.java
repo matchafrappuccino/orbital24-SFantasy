@@ -1,27 +1,22 @@
-package com.arcane.game.Actors.Characters;
+package com.arcane.game.Actors.Characters.Dracula;
 
+import com.arcane.game.Actions.Performance;
+import com.arcane.game.Actors.Character;
+import com.arcane.game.Actors.Characters.Charlotte;
 import com.arcane.game.Actors.Initializer;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.sun.tools.corba.se.idl.PragmaEntry;
 
 import java.util.LinkedList;
 
-import static com.arcane.game.Actors.Characters.Draculas.sizePortion;
+import static com.arcane.game.Actors.Characters.Dracula.Draculas.sizePortion;
 
 /*
     Marks:
@@ -32,15 +27,15 @@ import static com.arcane.game.Actors.Characters.Draculas.sizePortion;
     By now, the only difference between Dracula and Charlotte is that the texture of Dracula would be flipped.
 
  */
-public abstract class Dracula extends Actor {
+public abstract class Dracula extends Character {
     private TextureRegion region;
     private Draculas draculas;
     private int MAXHP;
     private int curHP;
-
     private ProgressBar HPBar;
     private Label HPLabel;
-
+    private DracuActions actions;
+    private Initializer.DracuSys dracuSys;
     public Dracula(LinkedList<Texture> textures, String path, Draculas draculas) {
         super();
         Texture tempTexture = new Texture(Gdx.files.internal(path));
@@ -53,6 +48,7 @@ public abstract class Dracula extends Actor {
         this.curHP = getMaxHP();
         float ratio = this.getHeight() / this.getWidth();
         this.setSize(Gdx.graphics.getWidth() * sizePortion, Gdx.graphics.getWidth() * sizePortion * ratio);
+        setActions();
         this.addListener(new ClickListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -75,7 +71,6 @@ public abstract class Dracula extends Actor {
                 if (!draculas.selectionActivated()) {
                     return;
                 }
-                System.out.println("Confirmed");
                 draculas.confirmSelection(itSelf());
                 draculas.unSelectDracula(itSelf());
             }
@@ -88,6 +83,10 @@ public abstract class Dracula extends Actor {
         this.HPBar.setPosition(0, 0);
         this.HPBar.setWidth(Gdx.graphics.getWidth() * sizePortion);
     }
+    public Initializer.DracuSys linkSys(Initializer.DracuSys sys) {
+        this.dracuSys = sys;
+        return sys;
+    }
 
     //Link the character to the HP label.
     public void linkHPLabel(Label label) {
@@ -99,6 +98,9 @@ public abstract class Dracula extends Actor {
 
     private Dracula itSelf() {
         return this;
+    }
+    public Charlotte getCharlotte() {
+        return draculas.getCharlotte();
     }
 
     public TextureRegion getRegion() {
@@ -150,7 +152,6 @@ public abstract class Dracula extends Actor {
 
     public int affectHP(int delta) {
         this.curHP += delta;
-        System.out.println(curHP);
         curHP = Math.max(0, Math.min(curHP, MAXHP));
         setHP(curHP); //Update the HP bar.
         return curHP;
@@ -158,9 +159,17 @@ public abstract class Dracula extends Actor {
 
     public abstract void noHP();
 
+    public abstract void setActions();
+    public final void setActions(DracuActions actions) {
+        this.actions = actions;
+    }
+    public Performance getNextAction() {
+        return this.actions.getNextAction();
+    }
+    public abstract void perform();
+
     public void deleteDracula() {
-        draculas.removeActor(HPBar);
-        draculas.removeActor(this);
+        draculas.removeActor(dracuSys);
     }
 
 }

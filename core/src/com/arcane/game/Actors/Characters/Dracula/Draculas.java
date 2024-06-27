@@ -1,6 +1,9 @@
-package com.arcane.game.Actors.Characters;
+package com.arcane.game.Actors.Characters.Dracula;
 
 import com.arcane.game.Actors.Cards.HandCards;
+import com.arcane.game.Actors.Character;
+import com.arcane.game.Actors.Characters.Charlotte;
+import com.arcane.game.Actors.Characters.Dracula.Dracula;
 import com.arcane.game.Actors.Initializer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,16 +20,18 @@ public class Draculas extends Group {
     private float WORLD_WIDTH;
     private float WORLD_HEIGHT;
     private HandCards handCards;
+    private Charlotte charlotte;
     private Image arrow;
     //private Dracula dracula;
 
-    public Draculas(float WORLD_WIDTH, float WORLD_HEIGHT, HandCards handCards) {
+    public Draculas(float WORLD_WIDTH, float WORLD_HEIGHT, HandCards handCards, Charlotte charlotte) {
         super();
         setSize(0F, 0F);
         this.WORLD_WIDTH = WORLD_WIDTH;
         this.WORLD_HEIGHT = WORLD_HEIGHT;
         this.handCards = handCards;
         arrow = new Image(new TextureRegion(new Texture("UI/arrow.png")));
+        this.charlotte = charlotte;
     }
 
     public void selectDracula(Dracula target) {
@@ -46,6 +51,26 @@ public class Draculas extends Group {
 
     public boolean selectionActivated() {
         return handCards.hasCardSelectedToDracula();
+    }
+    public Charlotte getCharlotte() {
+        return charlotte;
+    }
+
+    @Override
+    public void act(float delta) {
+        this.getChildren().forEach(actor -> actor.act(delta));
+        if (charlotte.roundEndConfirmed() && this.getChildren() != null) {
+            this.getChildren().forEach(actor -> {
+                if (actor instanceof Initializer.DracuSys) {
+                    ((Initializer.DracuSys) actor).getDracula().perform();
+                }
+            });
+            triggerNextRound();
+        }
+    }
+
+    public void triggerNextRound() {
+        this.charlotte.triggerNextRound();
     }
 
     @Override

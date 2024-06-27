@@ -2,10 +2,11 @@ package com.arcane.game.Screens;
 
 import com.arcane.game.Actors.Cards.Cards.TestCard;
 import com.arcane.game.Actors.Cards.HandCards;
-import com.arcane.game.Actors.Characters.Draculas;
-import com.arcane.game.Actors.Characters.Ordi_Dracula.TestDracula;
+import com.arcane.game.Actors.Characters.Dracula.Draculas;
+import com.arcane.game.Actors.Characters.Dracula.Ordi_Dracula.TestDracula;
 import com.arcane.game.Actors.Initializer;
 import com.arcane.game.ArcaneOdyssey;
+import com.arcane.game.UI.ConfirmButton;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -36,27 +37,29 @@ public class BattleScreen extends ArcaneScreen{
         this.viewport = new FillViewport(width, height);
         this.stage = new Stage(viewport);
 
-        charlotte = Initializer.initializeCharlotte(textures, "char.png", width, height);
+        handCards = new HandCards();
+        charlotte = Initializer.initializeCharlotte(textures, "char.png", width, height, handCards);
+        handCards.initialize(charlotte.getCharlotte(), draculas);
+        ConfirmButton confirmButton = new ConfirmButton("UI/button.png"
+                , "UI/buttonPressed.png"
+                , charlotte.getCharlotte());
 
-        handCards = new HandCards(charlotte.getCharlotte(), draculas);
-        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
-        handCards.addActor(new TestCard("Cards/EmptyCard.png", handCards));
-
-        draculas = new Draculas(width, height, handCards);
+        draculas = new Draculas(width, height, handCards, charlotte.getCharlotte());
         draculas.addActor(Initializer.initializeDracuSys(new TestDracula(textures ,draculas)));
         draculas.addActor(Initializer.initializeDracuSys(new TestDracula(textures ,draculas)));
 
         stage.addActor(charlotte);
         stage.addActor(draculas);
         stage.addActor(handCards);
+        stage.addActor(confirmButton);
+
+        charlotte.getCharlotte().newBattle();
     }
 
-    public void newRound() {
-        this.handCards.newRound();
-        this.charlotte.getCharlotte().newRound();
-    }
+//    public void newRound() {
+//        this.handCards.newRound();
+//        this.charlotte.getCharlotte().newRound();
+//    }
 
     @Override
     public void show() {

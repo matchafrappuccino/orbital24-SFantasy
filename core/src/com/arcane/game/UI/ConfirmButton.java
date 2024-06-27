@@ -1,5 +1,6 @@
 package com.arcane.game.UI;
 
+import com.arcane.game.Actors.Characters.Charlotte;
 import com.arcane.game.Screens.ArcaneScreen;
 import com.arcane.game.Screens.BattleScreen;
 import com.badlogic.gdx.Gdx;
@@ -10,9 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class NewRoundButton extends Button {
+public class ConfirmButton extends Button {
+
+    private final static float margin = 0.1F;
+    private final static float height = 0.15F;
     BattleScreen battleScreen;
-    public NewRoundButton(String up, String down, BattleScreen battleScreen) {
+    public ConfirmButton(String up, String down, Charlotte charlotte) {
         super();
         Texture upTexture = new Texture(Gdx.files.internal(up));
         Texture downTexture = new Texture(Gdx.files.internal(down));
@@ -24,8 +28,11 @@ public class NewRoundButton extends Button {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                battleScreen.newRound();
+                charlotte.endPlaying();
             }
         });
+        this.setPosition(Gdx.graphics.getWidth() * (1 - margin)
+                , Gdx.graphics.getHeight() * height);
+        this.setScale(1, 1);
     }
 }
